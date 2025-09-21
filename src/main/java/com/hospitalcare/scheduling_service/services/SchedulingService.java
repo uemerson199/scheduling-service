@@ -10,6 +10,7 @@ import com.hospitalcare.scheduling_service.repositories.AppointmentRepository;
 import com.hospitalcare.scheduling_service.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.RedisInvalidSubscriptionException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,14 @@ public class SchedulingService {
     private final RedisTemplate<String, String> redisTemplate;
     private final KafkaTemplate<String, AppointmentResponseDTO> kafkaTemplate;
     private final WebClient patientServiceWebClient;
+
+    public List<AppointmentResponseDTO> getAllAppointments() {
+        log.info("Buscando todos os agendamentos");
+        return appointmentRepository.findAll()
+                .stream()
+                .map(AppointmentMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public AppointmentResponseDTO scheduleAppointment(AppointmentRequestDTO requestDTO) {
@@ -88,4 +100,12 @@ public class SchedulingService {
             redisTemplate.delete(lockKey);
         }
     }
+
+    public void deleteAppointment(UUID id) {
+       if (!appointmentRepository.existsById(id)) {
+           throw new RedisInvalidSubscriptionException("Resource Not Found");
+       }
+        appointmentRepository.deleteById(id);
+    }
+
 }

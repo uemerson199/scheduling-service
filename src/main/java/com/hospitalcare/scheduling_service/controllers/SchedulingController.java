@@ -6,10 +6,10 @@ import com.hospitalcare.scheduling_service.services.SchedulingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/appointments")
@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class SchedulingController {
 
     private final SchedulingService schedulingService;
+
+    @GetMapping
+    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointments() {
+        List<AppointmentResponseDTO> appointments = schedulingService.getAllAppointments();
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<AppointmentResponseDTO> scheduleAppointment(@RequestBody AppointmentRequestDTO requestDTO) {
@@ -27,4 +33,12 @@ public class SchedulingController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable UUID id) {
+        schedulingService.deleteAppointment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
