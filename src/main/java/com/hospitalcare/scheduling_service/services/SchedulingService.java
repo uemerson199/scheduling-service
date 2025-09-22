@@ -10,9 +10,8 @@ import com.hospitalcare.scheduling_service.repositories.AppointmentRepository;
 import com.hospitalcare.scheduling_service.repositories.DoctorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.connection.RedisInvalidSubscriptionException;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.kafka.core.KafkaTemplate;
+// import org.springframework.kafka.core.KafkaTemplate; // <-- IMPORTAÇÃO REMOVIDA
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,7 +29,7 @@ public class SchedulingService {
     private final AppointmentRepository appointmentRepository;
     private final DoctorRepository doctorRepository;
     private final RedisTemplate<String, String> redisTemplate;
-    private final KafkaTemplate<String, AppointmentResponseDTO> kafkaTemplate;
+    // private final KafkaTemplate<String, AppointmentResponseDTO> kafkaTemplate;
     private final WebClient patientServiceWebClient;
 
     public List<AppointmentResponseDTO> getAllAppointments() {
@@ -91,8 +90,9 @@ public class SchedulingService {
 
             AppointmentResponseDTO responseDTO = AppointmentMapper.toResponseDTO(savedAppointment);
 
-            kafkaTemplate.send("appointment_events", responseDTO);
-            log.info("Evento de agendamento enviado para o tópico Kafka.");
+            // TODO: Reativar a integração com Kafka quando o notification-service estiver pronto
+            // kafkaTemplate.send("appointment_events", responseDTO);
+            // log.info("Evento de agendamento enviado para o tópico Kafka.");
 
             return responseDTO;
 
@@ -102,10 +102,11 @@ public class SchedulingService {
     }
 
     public void deleteAppointment(UUID id) {
-       if (!appointmentRepository.existsById(id)) {
-           throw new RedisInvalidSubscriptionException("Resource Not Found");
-       }
+        if (!appointmentRepository.existsById(id)) {
+            // Sugestão: Usar uma exceção mais específica, como uma ResourceNotFoundException que você pode criar.
+            // A exceção RedisInvalidSubscriptionException não parece ser a mais adequada aqui.
+            throw new RuntimeException("Agendamento com ID " + id + " não encontrado.");
+        }
         appointmentRepository.deleteById(id);
     }
-
 }

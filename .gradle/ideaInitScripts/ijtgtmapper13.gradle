@@ -1,0 +1,18 @@
+ext.pathMapper = [:]
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/util_rt.jar', '/tmp/tmpSk18kB/util_rt.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/external-system-rt.jar', '/tmp/tmpSk18kB/external-system-rt.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/gradle/lib/gradle-tooling-extension-api.jar', '/tmp/tmpH8WWqu/gradle-tooling-extension-api.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/gradle/lib/gradle-tooling-extension-impl.jar', '/tmp/tmpH8WWqu/gradle-tooling-extension-impl.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/util_rt.jar', '/tmp/tmpSk18kB/util_rt.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/external-system-rt.jar', '/tmp/tmpSk18kB/external-system-rt.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/gradle/lib/gradle-tooling-extension-api.jar', '/tmp/tmpH8WWqu/gradle-tooling-extension-api.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/gradle/lib/gradle-tooling-extension-impl.jar', '/tmp/tmpH8WWqu/gradle-tooling-extension-impl.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/Kotlin/lib/kotlin-gradle-tooling.jar', '/tmp/tmpyljCww/kotlin-gradle-tooling.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/opentelemetry.jar', '/tmp/tmpSk18kB/opentelemetry.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/lib/util-8.jar', '/tmp/tmpSk18kB/util-8.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/gradle/lib/gradle-api-8.13.jar', '/tmp/tmpH8WWqu/gradle-api-8.13.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/ktor/lib/ktor-gradle-tooling.jar', '/tmp/tmppIOSP7/ktor-gradle-tooling.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/compose-ide-plugin/lib/modules/intellij.compose.ide.plugin.gradleTooling.rt.jar', '/tmp/tmpBakGPP/intellij.compose.ide.plugin.gradleTooling.rt.jar')
+ext.pathMapper.put('C:/Program Files/JetBrains/IntelliJ IDEA 2024.2/plugins/micronaut/lib/micronaut-gradle-tooling.jar', '/tmp/tmpqlVg9e/micronaut-gradle-tooling.jar')
+ext.pathMapper.put("<<target java executable path>>", '/usr/lib/jvm/java-21-openjdk-amd64/bin/java')
+ext.mapPath = { path -> pathMapper.get(path) ?: path }
