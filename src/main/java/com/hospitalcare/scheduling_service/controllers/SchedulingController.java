@@ -24,6 +24,16 @@ public class SchedulingController {
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<AppointmentResponseDTO> getAppointmentById(@PathVariable UUID id) {
+        try {
+            AppointmentResponseDTO appointment = schedulingService.getAppointmentById(id);
+            return new ResponseEntity<>(appointment, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<AppointmentResponseDTO> scheduleAppointment(@RequestBody AppointmentRequestDTO requestDTO) {
         try {
@@ -34,11 +44,27 @@ public class SchedulingController {
         }
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteAppointment(@PathVariable UUID id) {
-        schedulingService.deleteAppointment(id);
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{id}")
+    public ResponseEntity<AppointmentResponseDTO> updateAppointment(@PathVariable UUID id, @RequestBody AppointmentRequestDTO requestDTO) {
+        try {
+            AppointmentResponseDTO response = schedulingService.updateAppointment(id, requestDTO);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("não encontrado")) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteAppointment(@PathVariable UUID id) {
+        try {
+            schedulingService.deleteAppointment(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -1,7 +1,8 @@
 package com.hospitalcare.scheduling_service.controllers;
 
-import com.hospitalcare.scheduling_service.entities.Doctor;
-import com.hospitalcare.scheduling_service.repositories.DoctorRepository;
+import com.hospitalcare.scheduling_service.dtos.DoctorRequestDTO;
+import com.hospitalcare.scheduling_service.dtos.DoctorResponseDTO;
+import com.hospitalcare.scheduling_service.services.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +16,39 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DoctorController {
 
-    private final DoctorRepository doctorRepository;
-
-    @PostMapping
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
-        Doctor savedDoctor = doctorRepository.save(doctor);
-        return new ResponseEntity<>(savedDoctor, HttpStatus.CREATED);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Doctor>> getAllDoctors() {
-        List<Doctor> doctors = doctorRepository.findAll();
-        return new ResponseEntity<>(doctors, HttpStatus.OK);
-    }
+    private final DoctorService doctorService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Doctor> getDoctorById(@PathVariable UUID id) {
-        return doctorRepository.findById(id)
+    public ResponseEntity<DoctorResponseDTO> getDoctorById(@PathVariable UUID id) {
+        return doctorService.getDoctorById(id)
                 .map(doctor -> new ResponseEntity<>(doctor, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping
+    public ResponseEntity<List<DoctorResponseDTO>> getAllDoctors() {
+        List<DoctorResponseDTO> doctors = doctorService.getAllDoctors();
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<DoctorResponseDTO> createDoctor(@RequestBody DoctorRequestDTO requestDTO) {
+        DoctorResponseDTO savedDoctor = doctorService.createDoctor(requestDTO);
+        return new ResponseEntity<>(savedDoctor, HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<DoctorResponseDTO> update(@PathVariable UUID id, @RequestBody DoctorRequestDTO dto) {
+        DoctorResponseDTO responseDTO = doctorService.updateDoctor(id, dto);
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteDoctorById(@PathVariable UUID id) {
+        doctorService.deleteDoctorById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }
