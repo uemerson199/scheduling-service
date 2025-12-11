@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  scheduling-service:
+    build: .
+    container_name: scheduling-service
+    ports:
+      - "80:8082"
+    environment:
+      - SERVER_PORT=8082
+      - RDS_HOSTNAME=${RDS_HOSTNAME}
+      - RDS_PORT=${RDS_PORT}
+      - RDS_DB_NAME=${RDS_DB_NAME}
+      - RDS_USERNAME=${RDS_USERNAME}
+      - RDS_PASSWORD=${RDS_PASSWORD}
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=6379
+      - PATIENT_SERVICE_URL=${PATIENT_SERVICE_URL}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: hospitalredis
+    ports:
+      - "6379:6379"
